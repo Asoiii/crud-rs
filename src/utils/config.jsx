@@ -99,3 +99,24 @@ export const dataBayi = [
     dokter: "Yuhana Fitra,Sp.PD.dr",
   },
 ];
+
+export const dataLaboratory = [
+  {
+    id: 1,
+    noRekamMedis: "13212312",
+    pemerikasaanLab: "Baik ",
+    jumlah: "120",
+  },
+  {
+    id: 2,
+    noRekamMedis: "99212314",
+    pemerikasaanLab: "bagus ",
+    jumlah: "320",
+  },
+  {
+    id: 3,
+    noRekamMedis: "87357123",
+    pemerikasaanLab: "Keren",
+    jumlah: "220",
+  },
+];

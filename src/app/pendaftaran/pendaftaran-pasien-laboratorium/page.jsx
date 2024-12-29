@@ -1,15 +1,16 @@
 "use client";
 import TextField from "@/components/ui/text-field";
 import React, { useEffect, useState, useCallback } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Form, Row, Button } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import RadioInput from "@/components/ui/radio-input";
 import SelectField from "@/components/ui/select-field";
 import DateInput from "@/components/ui/date-input";
 import TextArea from "@/components/ui/textArea-field";
-
+import TableLaboratorium from "@/components/view/pendaftaran-pasien-laboratorium/table/TableLaboratorium";
 import UploadPhotoField from "@/components/ui/uploadPhoto-field";
 import dataWilayah from "@/utils/config";
+
 const PendaftaranPasienBaru = () => {
   const methods = useForm({
     defaultValues: {
@@ -40,6 +41,23 @@ const PendaftaranPasienBaru = () => {
     },
     mode: "onSubmit",
   });
+
+  // terbaru dibuat oleh hamzah
+
+  // fungsi untuk menselect pada rujukan
+
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleRadioChange = (value) => {
+    setSelectedOption(value);
+  };
+
+  const handleSelectChange = (value) => {
+    setSelectedOption(value);
+  };
+
+  //  const untuk header pada table laboratorium
+  const headers = ["NO", "PEMERIKSAAN LAB", "JUMLAH", "ACTION"];
 
   const { setValue, watch } = methods;
   const title = watch("title");
@@ -158,67 +176,32 @@ const PendaftaranPasienBaru = () => {
             <div className="iq-header-title">
               <h3 className="card-title tracking-wide">
                 {" "}
-                Form Pendaftaran Identitas Pasien Baru
+                Registrasi Laboratorium
               </h3>
             </div>
           </div>
           <div className="card-body">
             <Form onSubmit={methods.handleSubmit(onSubmit)}>
-              {/* <div className="iq-card-header m-1">
-                <SelectField
-                  name="penjamin"
-                  label="Penjamin"
-                  options={[
-                    { label: "BPJS", value: "bpjs" },
-                    { label: "Non BPJS", value: "non-bpjs" },
-                  ]}
-                  placeholder="Pilih Penjamin"
-                  rules={{ required: "Penjamin is required" }}
-                  className="mb-3"
-                />
-              </div> */}
               <div className="iq-card-header m-1">
-                <div className="iq-header-title">
-                  <h4 className="card-title my-2 ">Registrasi Laboratarium</h4>
-                </div>
                 <Row>
-                  {/* <Col lg="12" className="my-3 ">
-                    <div className="d-flex gap-5 ">
-                      <RadioInput
-                        name="title"
-                        label="Title *"
-                        options={[
-                          { label: "Tn.", value: "Tn" },
-                          { label: "Ny.", value: "Ny" },
-                          { label: "Nn.", value: "Nn" },
-                          { label: "An.", value: "An" },
-                          { label: "By.", value: "By" },
-                          { label: "Sdr.", value: "Sdr" },
-                          { label: "Mr.", value: "Mr" },
-                          { label: "Mrs.", value: "Mrs" },
-                          { label: "Miss.", value: "Miss" },
-                        ]}
-                        rules={{ required: "title is required" }}
-                        className="d-flex gap-5 "
+                  <Row>
+                    <Col lg="6">
+                      <TextField
+                        label="No.Registrasi :"
+                        name="no_registrasi"
+                        type="text"
+                        placeholder="belum tersedia"
+                        className="form-control mb-0"
+                        rules={{
+                          required: "No Registrasi is required",
+                          pattern: {
+                            value: 2,
+                            message: "Invalid username format",
+                          },
+                        }}
                       />
-                    </div>
-                  </Col> */}
-                  <Col lg="6">
-                    <TextField
-                      label="No.Registrasi :"
-                      name="no_registrasi"
-                      type="text"
-                      placeholder="Enter No Registrasi"
-                      className="form-control mb-0"
-                      rules={{
-                        required: "No Registrasi is required",
-                        pattern: {
-                          value: 2,
-                          message: "Invalid username format",
-                        },
-                      }}
-                    />
-                  </Col>
+                    </Col>
+                  </Row>
                   <Col lg="6">
                     <TextField
                       label="No.RM Lama :"
@@ -324,6 +307,8 @@ const PendaftaranPasienBaru = () => {
                       }}
                     />
                   </Col>
+                </Row>
+                <Row>
                   <Col lg="6">
                     <TextArea
                       label="Alamat Rumah*"
@@ -335,6 +320,8 @@ const PendaftaranPasienBaru = () => {
                       rows={5}
                     />
                   </Col>
+                </Row>
+                <Row>
                   <Col lg="6">
                     <SelectField
                       name="pasien_provinsi"
@@ -410,363 +397,245 @@ const PendaftaranPasienBaru = () => {
                       />
                     </Col>
                   </Col>
-
+                </Row>
+              </div>
+              <div className="iq-card-header m-1">
+                <div className="iq-header-title">
+                  <h4 className="card-title my-2 "> Registrasi </h4>
+                </div>
+                <Row>
                   <Col lg="6">
-                    <SelectField
-                      name="statusPasien"
-                      label="Status"
+                    <RadioInput
+                      name="tipePasien"
+                      label="Tipe Pasien *"
                       options={[
-                        { label: "Belum Menikah", value: "Belum Menikah" },
-                        { label: "Menikah ", value: "Menikah" },
-                        { label: "Duda Keren", value: "Duda Keren" },
-                        { label: "Janda Anggun", value: "Janda Anggun" },
+                        { label: "Umum", value: "umum" },
+                        { label: "Penjamin", value: "penjamin" },
                       ]}
-                      placeholder="Pilih Status"
-                      rules={{ required: "Status is required" }}
+                      rules={{ required: "tipe pasien is required" }}
+                      className="d-flex gap-5 "
+                    />
+                  </Col>
+                  <Col lg="12">
+                    <SelectField
+                      name="penjamin"
+                      label="Penjamin"
+                      options={[
+                        { label: "BPJS", value: "bpjs" },
+                        { label: "Non BPJS", value: "non-bpjs" },
+                      ]}
+                      placeholder="Pilih Penjamin"
+                      rules={{ required: "Penjamin is required" }}
                       className="mb-3"
                     />
                   </Col>
                   <Col lg="6">
-                    <TextField
-                      label="Suku :"
-                      name="suku"
-                      type="text"
-                      placeholder="Enter Suku"
-                      className="form-control mb-0"
-                      rules={{
-                        required: "suku is required",
-                      }}
-                    />
-                  </Col>
-                  <Col lg="6">
-                    <SelectField
-                      name="agama"
-                      label="Agama"
-                      options={[
-                        { label: "Islam", value: "Islam" },
-                        { label: "Kristen ", value: "Kristen" },
-                        { label: "Protestan", value: "Protestan" },
-                        { label: "Katolik", value: "Katolik" },
-                        { label: "Hindu", value: "Hindu" },
-                        { label: "Budha", value: "Budha" },
-                        { label: "Konghucu", value: "Konghucu" },
-                      ]}
-                      placeholder="Pilih Agama"
-                      rules={{ required: "Agama is required" }}
+                    <DateInput
+                      name="tanggalRegistrasi"
+                      label="Tanggal Registrasi"
+                      placeholder={"Enter Tanggal Registrasi"}
+                      rules={{ required: "Tanggal Registrasi harus diisi" }} // Aturan validasi
                       className="mb-3"
                     />
                   </Col>
-
-                  <Col lg="12" className="my-3 ">
-                    <div className="d-flex gap-5 ">
-                      <RadioInput
-                        name="kewarganegaraan"
-                        label="Kewarganegaraan *"
-                        options={[
-                          { label: "WNI", value: "WNI" },
-                          { label: "WNA", value: "WNA" },
-                        ]}
-                        rules={{ required: "kewarganegaraan is required" }}
-                        className="d-flex gap-5 "
-                      />
+                  <div className="iq-card-header m-1">
+                    <div className="iq-header-title">
+                      <h4 className="card-title my-2 "> Dirujuk </h4>
                     </div>
-                    {kewarganegaraan === "WNA" && (
-                      <Col lg="6">
-                        <SelectField
-                          name="negara"
-                          label="Negara"
-                          options={[
-                            { label: "Amerika", value: "amerika" },
-                            { label: "Papua Nugini", value: "papuaNugini" },
-                            { label: "Nigeria", value: "nigeria" },
-                            { label: "Mesir", value: "mesir" },
-                            { label: "Selandia Baru", value: "selandiaBaru" },
-                            { label: "Thailand", value: "thailand" },
-                          ]}
-                          placeholder="Pilih Negara"
-                          rules={{ required: "Negara is required" }}
-                          className="mb-3"
-                        />
-                      </Col>
-                    )}
-                  </Col>
-
-                  <Col lg="12">
-                    <Col lg="6">
-                      <SelectField
-                        name="namaPendidikanTerakhir"
-                        label="Pendidikan Terakhir"
-                        options={[
-                          { label: "Magister", value: "magister" },
-                          { label: "Sarjana", value: "Sarjana" },
-                          { label: "SMA", value: "SMA" },
-                          { label: "SMP", value: "SMP" },
-                          { label: "SD", value: "sd" },
-                        ]}
-                        placeholder="Pilih Pendidikan Terakhir"
-                        rules={{ required: "Pendidikan Terakhir is required" }}
-                        className="mb-3"
-                      />
-                    </Col>
-                  </Col>
-                  <Col lg="12">
                     <Row>
                       <Col lg="6">
-                        <TextArea
-                          label="Alamat Domisili"
-                          name="alamatDomisili"
-                          placeholder="Masukkan alamat Domisili Pasien..."
-                          rules={{
-                            required: "alamat Domisili Pasien harus diisi",
-                          }}
-                          rows={5}
+                        <RadioInput
+                          name="kursul"
+                          options={[{ label: "Kursul", value: "kursul" }]}
+                          rules={{ required: "kursul is required" }}
+                          className="d-flex gap-5 mt-2"
+                          onChange={() => handleRadioChange("kursul")}
+                        />
+                      </Col>
+                      <Col lg="6">
+                        <SelectField
+                          name="pilihPromo"
+                          options={[
+                            {
+                              label: "bad anak discount 20%",
+                              value: "badAnak",
+                            },
+                            {
+                              label: "bad dewasa discount 10%",
+                              value: "badDewasa",
+                            },
+                          ]}
+                          placeholder="Pilih Kursul"
+                          rules={{ required: "Pilih Kursul is required" }}
+                          className="mb-3"
+                          onChange={(e) => handleSelectChange("kursul")}
+                          disabled={
+                            selectedOption && selectedOption !== "kursul"
+                          }
                         />
                       </Col>
                     </Row>
-                  </Col>
+                    <Row>
+                      <Col lg="6">
+                        <RadioInput
+                          name="LuarRs"
+                          options={[{ label: "Luar Rs", value: "LuarRs" }]}
+                          rules={{ required: "Luar Rs is required" }}
+                          className="d-flex gap-5 mt-2"
+                          onChange={() => handleRadioChange("LuarRs")}
+                        />
+                      </Col>
+                      <Col lg="6">
+                        <SelectField
+                          name="pilihRs"
+                          options={[
+                            { label: "Rsu", value: "Rsu" },
+                            { label: "Rsk", value: "Rsk" },
+                            { label: "Rb", value: "Rb" },
+                          ]}
+                          placeholder="Pilih rs"
+                          rules={{ required: "Pilih rs is required" }}
+                          className="mb-3"
+                          onChange={(e) => handleSelectChange("LuarRs")}
+                          disabled={
+                            selectedOption && selectedOption !== "LuarRs"
+                          }
+                        />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg="12">
+                        <RadioInput
+                          name="atasPermintaanSendiri"
+                          options={[
+                            {
+                              label: "Atas Permintaan Sendiri",
+                              value: "atasPermintaanSendiri",
+                            },
+                          ]}
+                          rules={{
+                            required: "Atas Permintaan Sendiri is required",
+                          }}
+                          className="d-flex gap-5 mt-2 mb-3"
+                          onChange={() =>
+                            handleRadioChange("atasPermintaanSendiri")
+                          }
+                        />
+                      </Col>
+                    </Row>
+                  </div>
 
                   <Col lg="6">
-                    <TextField
-                      label="No Telp :"
-                      name="noTelp"
-                      type="text"
-                      placeholder="Enter your no Telp..."
-                      className="form-control mb-0"
+                    <SelectField
+                      name="pilihPromo"
+                      label="Pilih Promo"
+                      options={[
+                        { label: "bad anak discount 20%", value: "badAnak" },
+                        {
+                          label: "bad dewasa discount 10%",
+                          value: "badDewasa",
+                        },
+                      ]}
+                      placeholder="Pilih Promo"
+                      rules={{ required: "Promo is required" }}
+                      className="mb-3"
+                    />
+                  </Col>
+                  <Col lg="6">
+                    <SelectField
+                      name="tipePemeriksaan"
+                      label="Tipe Pemeriksaan"
+                      options={[
+                        { label: "Psikologi Klinik", value: "psikologiKlink" },
+                        { label: "Poli Jantung", value: "poliJantung" },
+                      ]}
+                      placeholder="Tipe Pemeriksaan"
+                      rules={{ required: "Tipe Pemeriksaan is required" }}
+                      className="mb-3"
+                    />
+                  </Col>
+                  <Col lg="12">
+                    <RadioInput
+                      name="suratRujukan"
+                      label="Surat Rujukan"
+                      options={[
+                        { label: "Ada", value: "ada" },
+                        { label: "Tidak Ada", value: "tidakAda" },
+                      ]}
+                      rules={{ required: "Surat Rujukan is required" }}
+                      className="d-flex gap-5 "
+                    />
+                  </Col>
+                  <Col lg="6">
+                    <TextArea
+                      label="Diagnosa Awal"
+                      name="diagnosaAwal"
+                      placeholder="Masukkan Diagnosa Awal Pasien..."
                       rules={{
-                        required: "No Telp is required",
+                        required: "Informasi  diagnosa awal pasien harus diisi",
                       }}
+                      rows={5}
+                    />
+                  </Col>
+                  <Col lg="6">
+                    <DateInput
+                      name="tanggalSampling"
+                      label="Tanggal Sampling"
+                      placeholder={"Enter Tanggal Sampling"}
+                      rules={{ required: "Tanggal Registrasi harus diisi" }} // Aturan validasi
+                      className="mb-3"
                     />
                   </Col>
                 </Row>
               </div>
               <div className="iq-card-header m-1">
-                <div className="iq-header-title">
-                  <h4 className="card-title my-2 "> Keterangan Kesehatan *</h4>
-                </div>
-                <Col lg="2" className="my-3">
-                  <TextField
-                    label="Golongan Darah :"
-                    name="golonganDarah"
-                    type="text"
-                    placeholder="Enter Golongan Darah..."
-                    className="form-control mb-0"
-                    rules={{
-                      required: "Golongan Darah is required",
-                    }}
-                  />
-                </Col>
-                <Col lg="6" className="my-3">
-                  <TextArea
-                    label="Alergi :"
-                    name="alergi"
-                    placeholder="Enter riwayat alergi Pasien..."
-                    rules={{
-                      required: "data riwayat alergi pasien harus diisi",
-                    }}
-                    rows={5}
-                  />
-                </Col>
+                <TableLaboratorium
+                  headers={headers}
+                  title="Pemeriksaan Laboratory"
+                  id="id"
+                />
               </div>
               <div className="iq-card-header m-1">
-                <div className="iq-header-title">
-                  <h4 className="card-title my-2 "> Keterangan Keluarga *</h4>
-                </div>
-                <Col lg="6">
-                  <TextField
-                    label="Keluarga Terdekat yang dapat dihubungi :"
-                    name="keluargaTerdekat"
-                    type="text"
-                    placeholder="Enter Keluarga Terdekat..."
-                    className="form-control mb-0"
-                    rules={{
-                      required: "Keluarga Terdekat is required",
-                    }}
-                  />
-                </Col>
-                <Col lg="6">
-                  <SelectField
-                    name="hubunganKeluarga"
-                    label="Hubungan Keluarga * : "
-                    options={[
-                      { label: "Kandung", value: "Kandung" },
-                      { label: "Ipar ", value: "Ipar" },
-                      { label: "Paman", value: "Paman" },
-                      { label: "Lainnya", value: "Lainnya" },
-                    ]}
-                    placeholder="Pilih Hubungan Keluarga"
-                    rules={{ required: 'Hubungan Keluarga" is required' }}
-                    className="mb-3"
-                  />
-                </Col>
-                <Col lg="6">
-                  <TextField
-                    label="Karyawan Rumah Sakit :"
-                    name="karyawanRumahSakit"
-                    type="text"
-                    placeholder="Enter Karyawan Rumah Sakit..."
-                    className="form-control mb-0"
-                    rules={{
-                      required: "Karyawan Rumah Sakit is required",
-                    }}
-                  />
-                </Col>
-                <Col lg="6">
-                  <TextArea
-                    label="Alamat Keluarga / Domisili Sekarang :*"
-                    name="alamatKeluargaDomisili"
-                    placeholder="Masukkan alamatKeluarga Domisili Saat ini..."
-                    rules={{ required: "alamat Keluarga Domisili harus diisi" }}
-                    rows={5}
-                  />
-                </Col>
-                <Col lg="12">
-                  <Row>
-                    <Col lg="6">
-                      <SelectField
-                        name="keluarga_provinsi"
-                        label="Provinsi"
-                        options={dataWilayah.map((item) => ({
-                          label: item.provinsi,
-                          value: item.provinsi,
-                        }))}
-                        placeholder="Pilih Provinsi"
-                        rules={{ required: "Provinsi is required" }}
-                        className="mb-3"
-                        onChange={(e) =>
-                          handleChange("keluarga", "provinsi", e.target.value)
-                        }
-                      />
-                    </Col>
-                    <Col lg="6">
-                      <SelectField
-                        name="keluarga_kabupaten"
-                        label="Kabupaten"
-                        options={keluargaFilteredKabupaten.map((item) => ({
-                          label: item.nama,
-                          value: item.nama,
-                        }))}
-                        placeholder="Pilih Kabupaten"
-                        rules={{ required: "Kabupaten is required" }}
-                        className="mb-3"
-                        onChange={(e) =>
-                          handleChange("keluarga", "kabupaten", e.target.value)
-                        }
-                      />
-                    </Col>
-                    <Col lg="6">
-                      <SelectField
-                        name="keluarga_kecamatan"
-                        label="Kecamatan"
-                        options={keluargaFilteredKecamatan.map((item) => ({
-                          label: item.nama,
-                          value: item.nama,
-                        }))}
-                        placeholder="Pilih Kecamatan"
-                        rules={{ required: "Kecamatan is required" }}
-                        className="mb-3"
-                        onChange={(e) =>
-                          handleChange("keluarga", "kecamatan", e.target.value)
-                        }
-                      />
-                    </Col>
-                    <Col lg="6">
-                      <SelectField
-                        name="keluarga_kelurahan"
-                        label="Kelurahan"
-                        options={keluargaFilteredKelurahan.map((item) => ({
-                          label: item,
-                          value: item,
-                        }))}
-                        placeholder="Pilih Kelurahan"
-                        rules={{ required: "Kelurahan is required" }}
-                        className="mb-3"
-                      />
-                    </Col>
-                  </Row>
-                </Col>
-                <Col lg="12">
-                  <Row>
-                    <Col lg="6">
-                      <TextField
-                        label="No Telp :"
-                        name="noTelp"
-                        type="text"
-                        placeholder="Enter your no Telp..."
-                        className="form-control mb-0"
-                        rules={{
-                          required: "No Telp is required",
-                        }}
-                      />
-                    </Col>
-                    <Col lg="6">
-                      <TextField
-                        label="No Hp :"
-                        name="noHp"
-                        type="text"
-                        placeholder="Enter your no Hp..."
-                        className="form-control mb-0"
-                        rules={{
-                          required: "No Hp is required",
-                        }}
-                      />
-                    </Col>
-                  </Row>
-                </Col>
-                <Col lg="6">
-                  <TextField
-                    label="Nama Ayah :"
-                    name="ayah"
-                    type="text"
-                    placeholder="Enter your ayah..."
-                    className="form-control mb-0"
-                    rules={{
-                      required: "Ayah is required",
-                    }}
-                  />
-                </Col>
-                <Col lg="6">
-                  <TextField
-                    label="Nama Ibu :"
-                    name="Ibu"
-                    type="text"
-                    placeholder="Enter your Ibu..."
-                    className="form-control mb-0"
-                    rules={{
-                      required: "Ibu is required",
-                    }}
-                  />
-                </Col>
-                <Col lg="6">
-                  <TextField
-                    label="Nama Sutri :"
-                    name="Sutri"
-                    type="text"
-                    placeholder="Enter your Sutri..."
-                    className="form-control mb-0"
-                    rules={{
-                      required: "Sutri is required",
-                    }}
-                  />
-                </Col>
-                <Col lg="6">
-                  <TextField
-                    label="No KTP / Passport Sutri :"
-                    name="indentitasSutri"
-                    type="text"
-                    placeholder="Enter your No KTP / Passport Sutri..."
-                    className="form-control mb-0"
-                    rules={{
-                      required: "No KTP / Passport Sutri is required",
-                    }}
-                  />
-                </Col>
-                <Col lg="6">
-                  <UploadPhotoField
-                    name="fotoPasien"
-                    label="Upload Photo"
-                    rules={{ required: "This field is required" }} // Optional validation rules
-                  />
-                </Col>
+                <Row>
+                  <Col lg="6">
+                    <SelectField
+                      name="dokterPemeriksa"
+                      label="Dokter Pemeriksa"
+                      options={[
+                        { label: "dr. sutanti ayu", value: "psikologiKlink" },
+                        { label: "dr. Budi", value: "poliJantung" },
+                      ]}
+                      placeholder="Dokter Pemeriksa"
+                      rules={{ required: "Dokter Pemeriksa is required" }}
+                      className="mb-3"
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg="6">
+                    <RadioInput
+                      name="permintaanTestCito"
+                      label="Permintaan Test Cito"
+                      options={[
+                        { label: "Ya", value: "ya" },
+                        { label: "Tidak", value: "Tidak" },
+                      ]}
+                      rules={{ required: "Permintaan Test Cito is required" }}
+                      className="d-flex gap-5 "
+                    />
+                  </Col>
+                </Row>
+
+                <Row className="justify-content-start my-3">
+                  <Col lg="12">
+                    <Button className="btn btn-xl btn-warning me-3">
+                      Simpan
+                    </Button>
+                    <Button className="btn btn-xl btn-warning me-3 ">
+                      Batal
+                    </Button>
+                  </Col>
+                </Row>
               </div>
             </Form>
           </div>

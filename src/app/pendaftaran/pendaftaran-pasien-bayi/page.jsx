@@ -1,6 +1,6 @@
 "use client";
 
-import DataTable from "@/components/view/pendaftarn-pasien-bayi/table/dataTable";
+import DataTable from "@/components/view/pendaftaran-pasien-bayi/table/dataTable";
 // import { useBayi } from "@/lib/pendaftaran-pasien-bayi/isurance";
 import { deleteBayi } from "@/lib/pendaftaran-pasien-bayi/isurance/delete";
 import { getByIdBayi } from "@/lib/pendaftaran-pasien-bayi/isurance/getbyid";

@@ -29,16 +29,16 @@ const DataTable = ({ headers, data, onAdd, onSearch, actions, id }) => {
       const matchNoRekamMedis = filters.noRekamMedis
         ? patient.noRekamMedis
             ?.toLowerCase()
-            .includes(filters.noRekamMedis.toLowerCase())
+            .startsWith(filters.noRekamMedis.toLowerCase())
         : true;
       const matchNama = filters.nama
-        ? patient.nama?.toLowerCase().includes(filters.nama.toLowerCase())
+        ? patient.nama?.toLowerCase().startsWith(filters.nama.toLowerCase())
         : true;
       const matchRuang = filters.ruang
-        ? patient.ruang?.toLowerCase().includes(filters.ruang.toLowerCase())
+        ? patient.ruang?.toLowerCase().startsWith(filters.ruang.toLowerCase())
         : true;
       const matchDokter = filters.dokter
-        ? patient.dokter?.toLowerCase().includes(filters.dokter.toLowerCase())
+        ? patient.dokter?.toLowerCase().startsWith(filters.dokter.toLowerCase())
         : true;
 
       return matchNoRekamMedis && matchNama && matchRuang && matchDokter;
